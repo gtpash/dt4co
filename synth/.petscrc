@@ -1,0 +1,18 @@
+################################################################################
+# PETSc configuration file.
+# For mor information see: https://petsc.org/release/manualpages/Sys/PetscInitialize/
+################################################################################
+
+#  ----------------------------------------------------------------------------
+#  SNES control
+#  ----------------------------------------------------------------------------
+# -fwd_snes_view
+# -fwd_snes_converged_reason
+# -fwd_snes_monitor
+
+# Linear solver
+-fwd_ksp_type gmres
+
+# Preconditioner
+-fwd_pc_type hypre
+-fwd_pc_hypre_type boomeramg

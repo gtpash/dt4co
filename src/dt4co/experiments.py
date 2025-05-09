@@ -4,11 +4,11 @@ import numpy as np
 
 import hippylib as hp
 
-from gemini.models import RDTumorVarf, RDTXTumorVarf, radioModel, chemoModel, mollifiedRDTumorVarf, mollifiedRDTXTumorVarf, PWRDTXTumorVarf, mollifiedPWRDTXTumorVarf
-from gemini.dataModel import PatientData
-from gemini.utils.mesh_utils import load_mesh, load_mesh_subs, report_mesh_info, check_mesh_dimension
-from gemini.utils.model_utils import solveIndicators
-from gemini.utils.parallel import root_print
+from .models import RDTumorVarf, RDTXTumorVarf, radioModel, chemoModel, mollifiedRDTumorVarf, mollifiedRDTXTumorVarf, PWRDTXTumorVarf, mollifiedPWRDTXTumorVarf
+from .dataModel import PatientData
+from .utils.mesh_utils import load_mesh, load_mesh_subs, report_mesh_info, check_mesh_dimension
+from .utils.model_utils import solveIndicators
+from .utils.parallel import root_print
 
 class Experiment(object):
     """Set up an experiment's PDE problem.

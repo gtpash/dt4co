@@ -30,7 +30,15 @@ sys.path.append( os.path.join( os.environ.get('DT4CO_PATH'), "src" ) )
 ```
 
 ## Reference
-If you find the following helpful, please cite the following
+If you find this library useful in your research, please consider citing the following:
 ```
-BIBTEX PLACEHOLDER
+@misc{pash2025predictivedigitaltwinsquantified,
+      title={Predictive Digital Twins with Quantified Uncertainty for Patient-Specific Decision Making in Oncology}, 
+      author={Graham Pash and Umberto Villa and David A. Hormuth II and Thomas E. Yankeelov and Karen Willcox},
+      year={2025},
+      eprint={2505.08927},
+      archivePrefix={arXiv},
+      primaryClass={cs.CE},
+      url={https://arxiv.org/abs/2505.08927}, 
+}
 ```

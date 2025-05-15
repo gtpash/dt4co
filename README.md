@@ -1,8 +1,8 @@
 # `dt4co`
-Developing digital twins for computational oncology.
+This repository supports the development of predictive digital twins for oncology.
 
 ## Code Description
-This repository contains codes to support the development of predictive digital twins for oncology. In particular, these codes are to the modeling and simulation of glioblastoma multiforme / high grade gliomas. This repository spans data preprocessing, implementation of the forward model, quantification of uncertainty, and forward uncertainty propagation to quanities of interest. The pipeline begins with the preparation of longitudinal medical imaging and meshing of the biological domain. A low-rank approximation to the posterior is computed and uncertainty is propagated through the forward model. There are two major applications provided in this repository:
+In particular, the codes in this repository are applied to the modeling and simulation of glioblastoma multiforme / high grade gliomas. This repository spans data preprocessing, implementation of the forward model, quantification of uncertainty, and forward uncertainty propagation to quanities of interest. The pipeline begins with the preparation of longitudinal medical imaging and meshing of the biological domain. A low-rank approximation to the posterior is computed and uncertainty is propagated through the forward model. There are two major applications provided in this repository:
 1. An implementation for a cohort of patients and the requisite components of the pipeline are implemented in the `gbm` subdirectory (see the [`README`](./gbm/README.md) for more information).
 2. Simulation studies are useful for isolating individual parameters of the experimental setup and an implementation is provided in the `synth` directory (see the [`README`](./synth/README.md) for more information). In this case, the tradeoff between imaging frequency and prediction accuracy was studied.
 

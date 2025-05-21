@@ -281,7 +281,7 @@ class synthExperiment(Experiment):
             
             numpy2Vec(dvec, npdata)
             
-            misfit = hp.DiscreteStateObservation(obsOp, dvec, noise_variance=noise_var)
+            misfit = hp.DiscreteStateObservation(obsOp, dvec.copy(), noise_variance=noise_var)
             MISFITS.append(misfit)
         
         misfit_obj = hp.MisfitTD(MISFITS, visit_days)
@@ -303,12 +303,12 @@ class synthExperiment(Experiment):
         """
         MISFITS = []
         
-        uhelp = dl.Function(Vh)
         for i, visit_day in enumerate(visit_days):
+            uhelp = dl.Function(Vh)
             uhelp.vector().zero()
             uhelp.vector().axpy(1., uh.view(visit_day))
             
-            misfit = hp.ContinuousStateObservation(Vh, dl.dx, self.bc, uhelp.vector(), noise_variance=noise_var)
+            misfit = hp.ContinuousStateObservation(Vh, dl.dx, self.bc, uhelp.vector().copy(), noise_variance=noise_var)
             MISFITS.append(misfit)
         
         misfit_obj = hp.MisfitTD(MISFITS, visit_days)

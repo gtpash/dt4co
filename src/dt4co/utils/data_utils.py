@@ -466,15 +466,15 @@ def makeMisfitTD(pinfo, Vh: dl.FunctionSpace, bc: list, noise_var: float, zoff: 
             
             numpy2Vec(dvec, npdata)
             
-            misfit = DiscreteStateObservation(obsOp, dvec, noise_variance=noise_var)
+            misfit = DiscreteStateObservation(obsOp, dvec.copy(), noise_variance=noise_var)
             MISFITS.append(misfit)
     else:
         # use continuous state observation.
-        uhelp = dl.Function(Vh)
         for i, visit in enumerate(pinfo.visits[1:-nholdout]):
+            uhelp = dl.Function(Vh)
             uhelp.vector().zero()
             nifti2Function(visit.tumor, uhelp, Vh, zoff)
-            misfit = ContinuousStateObservation(Vh, dl.dx, bc, uhelp.vector(), noise_variance=noise_var)
+            misfit = ContinuousStateObservation(Vh, dl.dx, bc, uhelp.vector().copy(), noise_variance=noise_var)
             MISFITS.append(misfit)
     
     misfit_obj = MisfitTD(MISFITS, pinfo.visit_days[:-nholdout])

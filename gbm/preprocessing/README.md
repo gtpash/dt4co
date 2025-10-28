@@ -103,7 +103,7 @@ python3 computeCellularity.py --pdir /path/to/patient/data
 
 Visualization of the tumor segmentations on the mesh can be accomplished by calling
 ```
-python3 ../viz_tumor_segmentations.py
+python3 ../viz_registration.py
 ```
 
 **NOTE:** Be sure to update the patient-specific directories in the `runElastixPipeline.sh` script.

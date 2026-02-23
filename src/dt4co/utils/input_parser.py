@@ -1,10 +1,12 @@
 from types import SimpleNamespace
 
+
 class Map(dict):
     """
     Example:
     m = Map({'first_name': 'Eduardo'}, last_name='Pool', age=24, sports=['Soccer'])
     """
+
     def __init__(self, *args, **kwargs):
         super(Map, self).__init__(*args, **kwargs)
         for arg in args:
@@ -38,24 +40,24 @@ def parse_input_deck(file_name: str) -> dict:
     """
     Parses the input deck file and returns a dictionary containing
     the simulation parameters and settings.
-    
+
     Args:
         file_name (str): Path to file to input deck file to be parsed.
 
     Returns:
         input_dict (dict): Dictionary containing the input parameters from file.
     """
-    with open(file_name, 'r') as f:
+    with open(file_name, "r") as f:
         input_deck = f.readlines()
 
     # Remove comments, empty lines, and trailing comments
-    input_deck = [line.split('#')[0].strip() for line in input_deck if line.strip() and not line.startswith('#')]
+    input_deck = [line.split("#")[0].strip() for line in input_deck if line.strip() and not line.startswith("#")]
 
     # Split lines into keys and values, and convert values to int, float or string if possible
     input_dict = {}
     for line in input_deck:
         try:
-            key, value = line.split('=')
+            key, value = line.split("=")
             value = value.strip()
             # Check if value is enclosed in quotes
             if value.startswith('"') and value.endswith('"'):

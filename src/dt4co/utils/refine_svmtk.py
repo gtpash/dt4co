@@ -1,7 +1,8 @@
 import dolfin as dl
 from dolfin import *  # see BUG
 
-def svmtk_refine(mesh: dl.Mesh, subdomains: dl.MeshFunction, boundaries: dl.MeshFunction, outfname: str, markers: dl.MeshFunction=None):
+
+def svmtk_refine(mesh: dl.Mesh, subdomains: dl.MeshFunction, boundaries: dl.MeshFunction, outfname: str, markers: dl.MeshFunction = None):
     """For refinement of specific region of mesh (potentially tumor location?)
     See Section 4.5.2 of Rognes et. al.
 
@@ -12,7 +13,7 @@ def svmtk_refine(mesh: dl.Mesh, subdomains: dl.MeshFunction, boundaries: dl.Mesh
         markers (dl.MeshFunction): Boolean marker for where to refine (where the tumor is).
         outfname (str): Filename to save refined mesh.
 
-    """ 
+    """
     # Bind and compile the C++ code for dolfin adapt.
     cpp_binding = """
     #include<pybind11/pybind11.h>
@@ -29,30 +30,29 @@ def svmtk_refine(mesh: dl.Mesh, subdomains: dl.MeshFunction, boundaries: dl.Mesh
     }
     """
     adapt = dl.compile_cpp_code(cpp_binding).adapt
-    
+
     # Initialize connections between all mesh entitites
     # use a refinement algorithm that remembers parent facets
     mesh.init()
-    
+
     # KNOWN BUG: https://fenicsproject.org/qa/6719/using-adapt-on-a-meshfunction-looking-for-a-working-example/
     parameters["refinement_algorithm"] = "plaza_with_parent_facets"
-    
-    
+
     # Get markers from the NIfTI file containing tumor segmentation data.
-    
+
     if not markers:
         # Refine mesh according to the markers.
         new_mesh = adapt(mesh)
-        
+
         # Update subdomain and boundary markers.
         adapted_subdomains = adapt(subdomains, new_mesh)
         adapted_boundaries = adapt(boundaries, new_mesh)
     else:
         raise NotImplementedError("Haven't implemented refinement for markers")
-    
+
     print(f"Original mesh had {mesh.num_cells()} cells.")
     print(f"Refined mesh has {new_mesh.num_cells()} cells.")
-    
+
     # Write the adapted mesh to file(s).
     hdf = dl.HDF5File(new_mesh.mpi_comm(), outfname, "w")
     hdf.write(new_mesh, "/mesh")

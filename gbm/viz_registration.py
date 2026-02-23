@@ -4,12 +4,12 @@
 #   - ADC and ROI images are combined to generate a cellularity map.
 #   - Optionally, the cellularity map and the ROI are projected onto a mesh for visualization.
 #   - Optionally, the deformation field is applied to the mesh for visualization.
-# 
+#
 # Usage: python3 viz_registration.py --pinfo /path/to/patient/info
-#                   --datadir /path/to/patient/data          
+#                   --datadir /path/to/patient/data
 #                   --mesh /path/to/mesh/
 #                   --outdir /path/to/store/output
-# 
+#
 ################################################################################
 
 import os
@@ -24,41 +24,42 @@ from dt4co.utils.data_utils import nifti2Function, vectorNifti2Function
 from dt4co.utils.mesh_utils import report_mesh_info, check_mesh_dimension
 from dt4co.dataModel import PatientData
 
-def main(args)->None:
-    
+
+def main(args) -> None:
+
     # ---------------------------------------------------------------
     # Unpack arguments and build necessary paths.
     # ---------------------------------------------------------------
-    
+
     COMM = MPI.COMM_WORLD  # MPI communicator
-    
+
     pinfo = PatientData(args.pinfo, args.datadir)
-    
+
     MESHFILE = args.mesh
     OUTPUT_DIR = args.outdir
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    
+
     print(f"Patient data directory: {args.datadir}")
     print(f"Found {pinfo.get_num_visits()} imaging dates.")
     print(f"Imaging dates:")
     pinfo.print_timeline()
-    
+
     # ---------------------------------------------------------------
     # Write the cellularity maps + ROIs to file for visualization.
     # ---------------------------------------------------------------
-    
+
     mesh = dl.Mesh()
     with dl.XDMFFile(COMM, MESHFILE) as fid:
         fid.read(mesh)
-    
+
     ZOFF = check_mesh_dimension(mesh, args.zoff)
-    
+
     report_mesh_info(mesh)
-    
+
     # Create function spaces, write the segmentations to file.
     Vh = dl.FunctionSpace(mesh, "Lagrange", 2)
     ufun = dl.Function(Vh, name="roi")
-    
+
     ROI_VIZ_FILE = os.path.join(OUTPUT_DIR, "viz_roi.xdmf")
     print(f"Writing ROI data to file:\t{ROI_VIZ_FILE}")
     with dl.XDMFFile(COMM, ROI_VIZ_FILE) as fid:
@@ -68,7 +69,7 @@ def main(args)->None:
             ufun.vector().zero()
             nifti2Function(str(visit.roi), ufun, Vh, zoff=ZOFF, roi=True)
             fid.write(ufun, i)
-    
+
     ufun = dl.Function(Vh, name="tumor")
     TUMOR_VIZ_FILE = os.path.join(OUTPUT_DIR, "viz_tumor.xdmf")
     print(f"Writing tumor data to file:\t{TUMOR_VIZ_FILE}")
@@ -79,13 +80,13 @@ def main(args)->None:
             ufun.vector().zero()
             nifti2Function(str(visit.tumor), ufun, Vh, zoff=ZOFF)
             fid.write(ufun, i)
-    
+
     # ---------------------------------------------------------------
     # (Optionally) Write the deformations to file for visualization.
     # ---------------------------------------------------------------
-    
+
     if args.deformations:
-        
+
         Vh = dl.VectorFunctionSpace(mesh, "Lagrange", 2)
         ufun = dl.Function(Vh, name="deformation")
 
@@ -105,10 +106,10 @@ def main(args)->None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Compute the tumor cellularity maps and write them to file.")
-    
+
     parser.add_argument("--pinfo", type=str, help="Path to the patient information file.")
     parser.add_argument("--datadir", type=str, help="Path to the patient data directory.")
-    
+
     # Optional arguments, for visualization.
     parser.add_argument("--mesh", type=str, help="Path to the mesh file.")
     parser.add_argument("--outdir", type=str, help="Output directory for visualization.")
@@ -118,5 +119,5 @@ if __name__ == "__main__":
     parser.add_argument("--deformations", action=argparse.BooleanOptionalAction, default=False, help="Apply the deformations to the mesh.")
 
     args = parser.parse_args()
-    
+
     main(args)

@@ -1,0 +1,9 @@
+[tool.black]
+line-length = 200
+skip-magic-trailing-comma = true
+target-version = ['py312']
+exclude = '''
+/(
+    .git
+)/
+'''

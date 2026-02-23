@@ -14,7 +14,6 @@ from datetime import datetime, date
 from typing import List, Tuple, Dict, TypeAlias
 import numpy as np
 
-
 # Type aliases
 TreatmentTime: TypeAlias = date
 RadiotherapyProtocol: TypeAlias = Dict[TreatmentTime, float]

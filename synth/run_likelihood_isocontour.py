@@ -176,8 +176,13 @@ def main(args) -> None:
     llnp = np.zeros(len(steps), len(steps))  # array to store the log-likelihood values at each point in the grid
 
     # loop through the grid, evaluate the likelihood at each point.
+    total = len(steps) * len(steps)
+    count = 0
     for ii, stepi in enumerate(steps):
         for jj, stepj in enumerate(steps):
+            count += 1
+            root_print(COMM, f"Progress: {count}/{total}... Evaluating the likelihood at grid point ({stepi:.2f}, {stepj:.2f}).")
+
             mfun.vector().zero()
             mfun.vector().axpy(1.0, mapfun.vector())  # start at the MAP point
 
@@ -194,7 +199,6 @@ def main(args) -> None:
 
             cost = model.cost(xx)  # evaluate the cost (negative log-likelihood) at the current point
 
-            # todo: record location and cost value for visualization later.
             llnp[ii, jj] = cost[2]  # store only the misfit value
 
     if COMM.rank == 0:

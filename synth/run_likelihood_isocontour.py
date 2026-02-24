@@ -3,19 +3,18 @@
 # This script is intended to evaluate the log-likelihood on a grid of parameter
 # values, so that one can compute the isocontours of the log-likelihood function.
 #
-# An example call to this script is: #todo
+# An example call to this script is:
 # mpirun -np <num_procs> python3 run_likelihood_isocontour.py
 #        --mesh /path/to/mesh/
 #        --pdir /path/to/patient/data/
 #        --imgfreq imaging_frequency
+#        --noisy
 #        --experiment_type EXPERIMENT_TYPE
-#        --samples /path/to/samples.h5
-#        --nsamples num_samples
-#        --sample_type SAMPLE_TYPE
-#        --l2f
-#        --pred_date prediction_date
+#        --map /path/to/map/
+#        --num_steps num_steps
+#        --step max_step_size
 #        --outdir /path/to/store/results/
-#        --write_viz
+#        --verbose
 #        -PETScOptions
 #
 # For more information run: python3 run_likelihood_isocontour.py --help

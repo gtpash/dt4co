@@ -32,6 +32,7 @@ module load tacc-apptainer
 module list
 date
 
+MESH_LEVELS=( 32 64 96 128 192 256 )
 SIF=$WORK/containers/onco-fenics_latest.sif
 STLDIR=$SCRATCH/upenn_101_vbg/subjects/sub-00101/stl/
 OUTDIR=$SCRATCH/sub-00101_mesh/
@@ -39,11 +40,6 @@ OUTDIR=$SCRATCH/sub-00101_mesh/
 mkdir -p $OUTDIR
 cd $OUTDIR
 pwd
-
-# post-process to generate the STL files
-apptainer run $SIF $DT4CO_PATH/gbm/preprocessing/postprocFreeSurfer.sh sub-$SUBID $T1 $SD
-
-MESH_LEVELS=( 32 64 96 128 192 256)
 
 # generate the sequence of meshes
 for L in "${MESH_LEVELS[@]}"

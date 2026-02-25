@@ -182,7 +182,7 @@ def main(args) -> None:
     steps = np.linspace(-1 * args.step, args.step, args.num_steps, endpoint=True)  # set up the mesh grid
     stepdir = dl.Function(Vh[hp.PARAMETER])
 
-    llnp = np.zeros(len(steps), len(steps))  # array to store the log-likelihood values at each point in the grid
+    llnp = np.zeros((len(steps), len(steps)))  # array to store the log-likelihood values at each point in the grid
 
     # loop through the grid, evaluate the likelihood at each point.
     total = len(steps) * len(steps)

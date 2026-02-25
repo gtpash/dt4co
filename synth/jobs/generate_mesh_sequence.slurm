@@ -35,7 +35,7 @@ date
 MESH_LEVELS=( 32 64 96 128 192 256 )
 SIF=$WORK/containers/onco-fenics_latest.sif
 STLDIR=$SCRATCH/upenn_101_vbg/subjects/sub-00101/stl/
-OUTDIR=$SCRATCH/sub-00101_mesh/
+OUTDIR=$SCRATCH/sub-00101_mesh_convergence/sub-00101_mesh/
 
 mkdir -p $OUTDIR
 cd $OUTDIR

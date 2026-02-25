@@ -151,7 +151,7 @@ def main(args) -> None:
     misfits = exp.spoofMisfitTD(visits=visits, visit_days=visit_days, Vh=Vh[hp.STATE], noise_var=NOISE_VAR, exnii=IC_FILE)
 
     # -----------------------------------------------------------
-    # Read back the MAP point.
+    # Read back the MAP point, set up perturbation directions.
     # -----------------------------------------------------------
 
     root_print(COMM, SEP)
@@ -164,6 +164,15 @@ def main(args) -> None:
 
     mapfun = dl.Function(Vh[hp.PARAMETER])
     mapfun.vector().axpy(1.0, mmap[0])  # copy the MAP point into a Function
+
+    map_D = mapfun.sub(0, deepcopy=True)
+    map_K = mapfun.sub(1, deepcopy=True)
+
+    # Compute the spatial mean of each parameter field (in log-space).
+    vol = dl.assemble(dl.Constant(1.0) * dl.dx(mesh))
+    mean_logD = dl.assemble(map_D * dl.dx) / vol
+    mean_logK = dl.assemble(map_K * dl.dx) / vol
+    root_print(COMM, f"MAP spatial means (log-space): logD = {mean_logD:.4f}, logK = {mean_logK:.4f}")
 
     # -----------------------------------------------------------
     # Loop through steps and evaluate the likelihood.
@@ -178,16 +187,17 @@ def main(args) -> None:
     # loop through the grid, evaluate the likelihood at each point.
     total = len(steps) * len(steps)
     count = 0
+    start = time.perf_counter()
     for ii, stepi in enumerate(steps):
         for jj, stepj in enumerate(steps):
             count += 1
-            root_print(COMM, f"Progress: {count}/{total}... Evaluating the likelihood at grid point ({stepi:.2f}, {stepj:.2f}).")
+            root_print(COMM, f"Progress:\t{count}/{total}. Average time per solve: {(time.perf_counter() - start) / count:.2f} seconds.")
 
             mfun.vector().zero()
             mfun.vector().axpy(1.0, mapfun.vector())  # start at the MAP point
 
             # step direction in the parameter space (log-space for D and K)
-            stepdir.assign(dl.Constant([stepi * np.log(exp.D0), stepj * np.log(exp.K0)]))
+            stepdir.assign(dl.Constant([stepi * abs(mean_logD), stepj * abs(mean_logK)]))
 
             mfun.vector().axpy(1.0, stepdir.vector())  # take a step in the parameter space
 

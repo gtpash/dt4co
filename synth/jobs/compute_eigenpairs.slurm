@@ -18,7 +18,7 @@
 #SBATCH -J compute_eig              # Job name
 #SBATCH -o compute_eieg.o.%j        # Name of stdout output file
 #SBATCH -e compute_eieg.e.%j        # Name of stderr error file
-#SBATCH -p small                    # Queue (partition) name
+#SBATCH -p normal                   # Queue (partition) name
 #SBATCH -N 4                        # Total # of nodes 
 #SBATCH -n 4                        # Total # of mpi tasks
 #SBATCH -t 48:00:00                 # Run time (hh:mm:ss)

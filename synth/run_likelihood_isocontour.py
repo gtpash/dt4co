@@ -89,7 +89,7 @@ def main(args) -> None:
     # ------------------------------------------------------------
     root_print(COMM, "Setting up function spaces and tissue segmentation indicator function.")
     Vh = exp.setupBIPFunctionSpaces(mesh, mle=False)
-    assigner, Vhmi = exp.setupFunctionAssigner(mesh)
+    assigner, Vhmi = exp.setupFunctionAssigner(Vh[hp.PARAMETER])
     mfun = dl.Function(Vh[hp.PARAMETER])
 
     # ------------------------------------------------------------

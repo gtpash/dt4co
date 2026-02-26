@@ -110,7 +110,7 @@ class synthExperiment(Experiment):
 
         return Vh
 
-    def setupFunctionAssigner(self, mesh: dl.Mesh) -> dl.FunctionAssigner:
+    def setupFunctionAssigner(self, Vh) -> dl.FunctionAssigner:
         """Set up function assigner for (BIP) mixed vector space.
 
         Args:
@@ -119,11 +119,9 @@ class synthExperiment(Experiment):
         Returns:
             dl.FunctionAssigner: The function assigner for the mixed space.
         """
-        Vhmi = dl.FunctionSpace(mesh, "Lagrange", self.PARAM_DEGREE)
-        mixed_element = ufl.MixedElement([Vhmi.ufl_element(), Vhmi.ufl_element()])
-        Vhm = dl.FunctionSpace(mesh, mixed_element)
+        Vhi = dl.FunctionSpace(Vh.mesh, "Lagrange", self.PARAM_DEGREE)
 
-        return dl.FunctionAssigner(Vhm, [Vhmi, Vhmi]), Vhmi
+        return dl.FunctionAssigner(Vh, [Vhi, Vhi]), Vhi
 
     def setupTXModels(self, tx_start: int = 14.0):
         """Set up the radiotherapy and chemotherapy models."""

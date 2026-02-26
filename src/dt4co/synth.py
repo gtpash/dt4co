@@ -123,7 +123,7 @@ class synthExperiment(Experiment):
         mixed_element = ufl.MixedElement([Vhmi.ufl_element(), Vhmi.ufl_element()])
         Vhm = dl.FunctionSpace(mesh, mixed_element)
 
-        return dl.FunctionAssigner(Vhm, [Vhmi, Vhmi])
+        return dl.FunctionAssigner(Vhm, [Vhmi, Vhmi]), Vhmi
 
     def setupTXModels(self, tx_start: int = 14.0):
         """Set up the radiotherapy and chemotherapy models."""

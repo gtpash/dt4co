@@ -89,7 +89,7 @@ def main(args) -> None:
     # ------------------------------------------------------------
     root_print(COMM, "Setting up function spaces and tissue segmentation indicator function.")
     Vh = exp.setupBIPFunctionSpaces(mesh, mle=False)
-    assigner = exp.setupFunctionAssigner(mesh)
+    assigner, Vhmi = exp.setupFunctionAssigner(mesh)
     mfun = dl.Function(Vh[hp.PARAMETER])
 
     # ------------------------------------------------------------
@@ -175,7 +175,6 @@ def main(args) -> None:
     root_print(COMM, f"MAP spatial means (log-space): logD = {mean_logD:.4f}, logK = {mean_logK:.4f}")
 
     # for non-constant step directions
-    Vhmi = dl.FunctionSpace(mesh, "Lagrange", exp.PARAM_DEGREE)
     stepdirD = dl.Function(Vhmi)
     stepdirK = dl.Function(Vhmi)
 

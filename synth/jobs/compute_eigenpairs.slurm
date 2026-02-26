@@ -16,8 +16,8 @@
 #----------------------------------------------------
 
 #SBATCH -J compute_eig              # Job name
-#SBATCH -o compute_eieg.o.%j        # Name of stdout output file
-#SBATCH -e compute_eieg.e.%j        # Name of stderr error file
+#SBATCH -o compute_eig.o.%j         # Name of stdout output file
+#SBATCH -e compute_eig.e.%j         # Name of stderr error file
 #SBATCH -p normal                   # Queue (partition) name
 #SBATCH -N 4                        # Total # of nodes 
 #SBATCH -n 4                        # Total # of mpi tasks
@@ -60,7 +60,8 @@ MV2_SMP_USE_CMA=0 MV2_ENABLE_AFFINITY=0 ibrun apptainer run $SIF python3 -u $DT4
     --outdir $BIPDIR \
     --imgfreq $IMGFREQ \
     --experiment_type $EXPTYPE \
+    --noisy \
     --num_evals $NUM_EVALS \
     --oversample $OVERSAMPLE \
-    --noisy \
+    --map $MAP \
     -fwd_ksp_type gmres -fwd_pc_type hypre -fwd_pc_hypre_type boomeramg

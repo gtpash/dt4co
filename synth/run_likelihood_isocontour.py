@@ -197,9 +197,11 @@ def main(args) -> None:
             mfun.vector().axpy(1.0, mapfun.vector())  # start at the MAP point
 
             # step direction in the parameter space (log-space for D and K)
-            stepdir.assign(dl.Constant([stepi * abs(mean_logD), stepj * abs(mean_logK)]))
+            # stepdir.assign(dl.Constant([stepi * abs(mean_logD), stepj * abs(mean_logK)]))
+            # mfun.vector().axpy(1.0, stepdir.vector())  # take a step in the parameter space
 
-            mfun.vector().axpy(1.0, stepdir.vector())  # take a step in the parameter space
+            mfun.vector().axpy(stepi, map_D.vector())  # step in the direction of MAP estimate of D
+            mfun.vector().axpy(stepj, map_K.vector())  # step in the direction of MAP estimate of K
 
             xx = model.generate_vector()  # generate a vector in the parameter space
             xx[hp.PARAMETER].axpy(1.0, mfun.vector())  # set the parameter vector to the current point in the grid

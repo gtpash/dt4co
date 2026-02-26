@@ -174,6 +174,11 @@ def main(args) -> None:
     mean_logK = dl.assemble(map_K * dl.dx) / vol
     root_print(COMM, f"MAP spatial means (log-space): logD = {mean_logD:.4f}, logK = {mean_logK:.4f}")
 
+    # for non-constant step directions
+    Vhmi = dl.FunctionSpace(mesh, "Lagrange", exp.PARAM_DEGREE)
+    stepdirD = dl.Function(Vhmi)
+    stepdirK = dl.Function(Vhmi)
+
     # -----------------------------------------------------------
     # Loop through steps and evaluate the likelihood.
     # -----------------------------------------------------------
@@ -198,10 +203,14 @@ def main(args) -> None:
 
             # step direction in the parameter space (log-space for D and K)
             # stepdir.assign(dl.Constant([stepi * abs(mean_logD), stepj * abs(mean_logK)]))
-            # mfun.vector().axpy(1.0, stepdir.vector())  # take a step in the parameter space
 
-            mfun.vector().axpy(stepi, map_D.vector())  # step in the direction of MAP estimate of D
-            mfun.vector().axpy(stepj, map_K.vector())  # step in the direction of MAP estimate of K
+            stepdirD.vector().zero()
+            stepdirD.vector().axpy(stepi, map_D.vector())  # step in the direction of MAP estimate of D
+            stepdirK.vector().zero()
+            stepdirK.vector().axpy(stepj, map_K.vector())  # step in the direction of MAP estimate of K
+            assigner.assign(stepdir, [stepdirD, stepdirK])
+
+            mfun.vector().axpy(1.0, stepdir.vector())  # take a step in the parameter space
 
             xx = model.generate_vector()  # generate a vector in the parameter space
             xx[hp.PARAMETER].axpy(1.0, mfun.vector())  # set the parameter vector to the current point in the grid

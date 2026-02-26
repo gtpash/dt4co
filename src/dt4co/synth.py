@@ -119,7 +119,7 @@ class synthExperiment(Experiment):
         Returns:
             dl.FunctionAssigner: The function assigner for the mixed space.
         """
-        Vhi = dl.FunctionSpace(Vh.mesh, "Lagrange", self.PARAM_DEGREE)
+        Vhi = dl.FunctionSpace(Vh.mesh(), "Lagrange", self.PARAM_DEGREE)
 
         return dl.FunctionAssigner(Vh, [Vhi, Vhi]), Vhi
 

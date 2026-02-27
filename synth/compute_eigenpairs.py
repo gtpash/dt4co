@@ -170,7 +170,9 @@ def main(args) -> None:
     hp.parRandom.normal(1.0, Omega)
     d, U = hp.doublePassG(Hmisfit, mprior.R, mprior.Rsolver, Omega, kk, s=1, check=False)
 
-    root_print(COMM, "Eigenvalues computed, writing to file.")
+    root_print(COMM, "Eigenvalues computed.")
+    root_print(COMM, f"Writing eigenvalues to file: {os.path.join(OUT_DIR, f'eigenvalues_{kk}.txt')}")
+
     if COMM.rank == 0:
         np.savetxt(os.path.joint(args.outdir, f"eigenvalues_{args.num_evals}.txt"), d)
 

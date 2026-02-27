@@ -221,6 +221,9 @@ def main(args) -> None:
 
             llnp[ii, jj] = cost[2]  # store only the misfit value
 
+    root_print(COMM, "Finished evaluating the likelihood on the grid.")
+    root_print(COMM, f"Writing values to file: {os.path.join(OUT_DIR, 'likelihood_isocontour_data.npz')}")
+
     if COMM.rank == 0:
         # save the log-likelihood values to file for later visualization.
         np.savez(os.path.join(args.outdir, "likelihood_isocontour_data.npz"), steps=steps, llnp=llnp)

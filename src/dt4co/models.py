@@ -317,7 +317,7 @@ class chemoModel:
         if np.any(time_since_applied > 0):
             active_time = time_since_applied[time_since_applied >= 0]
             ct_decay = np.exp(-self.beta * active_time)  # clearance term
-            ct_factor = (1.0 - self.ct_effect) * np.sum(ct_decay)  # 1 - surviving fraction
+            ct_factor = self.ct_effect * np.sum(ct_decay)
             return dl.Constant(ct_factor)
         else:
             return dl.Constant(0.0)
@@ -358,7 +358,7 @@ class RDchemoTumorVarf:
     def chemo(self, t):
         """Return the radiotherapy effect."""
         cteffect = dl.Constant(self.txmodel.get_tx_factor(t))  # don't need the 1/dt because chemo is already decayed
-        return self.dt_inv * cteffect * self.u * self.p * ufl.dx
+        return cteffect * self.u * self.p * ufl.dx
 
     def __call__(self, u, u_old, m, p, t):
         self.u = u
@@ -453,7 +453,7 @@ class RDTXTumorVarf:
     def chemo(self, t):
         """Return the radiotherapy effect."""
         cteffect = dl.Constant(self.ctmodel.get_tx_factor(t))
-        return self.dt_inv * cteffect * self.u * self.p * ufl.dx
+        return cteffect * self.u * self.p * ufl.dx
 
     def __call__(self, u, u_old, m, p, t):
         self.u = u
@@ -507,7 +507,7 @@ class mollifiedRDTXTumorVarf(RDTXTumorVarf):
     def chemo(self, t):
         """Return the radiotherapy effect."""
         cteffect = dl.Constant(self.ctmodel.get_tx_factor(t))
-        return self.dt_inv * cteffect * self.u * self.p * self.dX
+        return cteffect * self.u * self.p * self.dX
 
     def __call__(self, u, u_old, m, p, t):
         self.u = u
@@ -565,7 +565,7 @@ class PWRDTXTumorVarf:
     def chemo(self, t):
         """Return the radiotherapy effect."""
         cteffect = dl.Constant(self.ctmodel.get_tx_factor(t))
-        return self.dt_inv * cteffect * self.u * self.p * self.dX
+        return cteffect * self.u * self.p * self.dX
 
     def __call__(self, u, u_old, m, p, t):
         self.u = u
@@ -677,7 +677,7 @@ class CenteredPWRDTXTumorVarf:
     def chemo(self, t):
         """Return the radiotherapy effect."""
         cteffect = dl.Constant(self.ctmodel.get_tx_factor(t))
-        return self.dt_inv * cteffect * self.u * self.p * self.dX
+        return cteffect * self.u * self.p * self.dX
 
     def __call__(self, u, u_old, m, p, t):
         self.u = u

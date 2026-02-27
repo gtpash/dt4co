@@ -89,7 +89,7 @@ class synthExperiment(Experiment):
 
         # Define the chemotherapy term.
         self.CT_EFFECT = 0.3  # chemotherapy surviving fraction
-        self.BETA = 24.0 / 1.8  # clearance rate of the chemotherapy [1/day]
+        self.BETA = 24.0 * np.log(2.0) / 1.8  # clearance rate of the chemotherapy [1/day]
 
         # Define the boundary conditions.
         self.bc = []  # homogeneous Neumann for state

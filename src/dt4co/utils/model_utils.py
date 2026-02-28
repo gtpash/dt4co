@@ -7,14 +7,14 @@ import hippylib as hp
 
 
 # -------------------------------------
-def solveIndicators(mesh: dl.Mesh, subs: dl.MeshFunction, sidx: int, solver_type="lu") -> dl.Function:
+def solveIndicators(mesh: dl.Mesh, subs: dl.MeshFunction, sidx: int, solver_params: dict = None) -> dl.Function:
     """Solve for indicator function
 
     Args:
         mesh (dl.Mesh): FEniCS mesh.
         subs (dl.MeshFunction): Mesh function with integer values for each subdomain.
         sidx (int): Subdomain index for which to solve the indicator function.
-        solver_type (str, optional): Solver type to be passed to `dl.solve`. Defaults to "lu".
+        solver_params (dict, optional): Solver parameters for dl.solve. Defaults to None.
 
     Returns:
         dl.Function: Indicator function for the specified subdomain index.
@@ -29,10 +29,11 @@ def solveIndicators(mesh: dl.Mesh, subs: dl.MeshFunction, sidx: int, solver_type
     chi_test = dl.TestFunction(Vh_DG0)
     dx = dl.Measure("dx", domain=mesh, subdomain_data=subs)
     varf = dl.inner(chi_test, chi) * ufl.dx - ufl.inner(dl.Constant(1.0), chi_test) * dx(sidx)
-    if solver_type == "lu":
-        dl.solve(varf == 0, chi, "lu")
+
+    if solver_params is not None:
+        dl.solve(varf == 0, chi, solver_params=solver_params)
     else:
-        dl.solve(varf == 0, chi, "cg", "hypre_amg")
+        dl.solve(varf == 0, chi)
 
     return chi
 

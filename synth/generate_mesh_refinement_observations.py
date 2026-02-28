@@ -145,7 +145,7 @@ def main(args) -> None:
     # write out data
     root_print(COMM, "Rasterizing the support of the domain.")
     root_print(COMM, f"Output file: {os.path.join(OUT_DIR, 'domain_support.nii')}")
-    support = dl.interpolate(dl.Constant(1.0), Vh)  # support of the domain (for masking voxels in the domain)
+    support = dl.interpolate(dl.Constant(1.0), Vh[hp.STATE])  # support of the domain (for masking voxels in the domain)
     helpfun.vector().zero()
     helpfun.vector().axpy(1.0, support.vector())
     rasterizeFunction(helpfun, Vh[hp.STATE], REF_NII, os.path.join(OUT_DIR, "domain_support.nii"), obsOp=obsOp)

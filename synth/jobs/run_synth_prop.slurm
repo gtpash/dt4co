@@ -48,7 +48,6 @@ EXPTYPE="rdtx"
 IMGFREQ="1"
 EXPNAME="${EXPTYPE}_freq${IMGFREQ}"
 
-PDIR="$WORK/data/UPENN-GBM/sub-$SUBID/"
 RESDIR="${SCRATCH}/hgg/sub-${SUBID}/"
 BIPDIR="${RESDIR}/${EXPNAME}_bip/"
 MESH="${RESDIR}/mesh/full64-all.h5"
@@ -72,7 +71,7 @@ fi
 #  ---------------------------------------------------------
 PRED_DATE="28"
 PRED_DATE=$(printf "%03d" $PRED_DATE)  # Pads with zero to "XXX" format
-L2F_FLAG="--no-l2f"                    # Flag for last-to-final pushforward "--l2f" or "--no-l2f"
+L2F_FLAG="--l2f"                    # Flag for last-to-final pushforward "--l2f" or "--no-l2f"
 PROP_IMGFREQ="7"
 VIZ_FLAG="--no-write_viz"              # Flag for writing visualization data "--write_viz" or "--no-write_viz"
 

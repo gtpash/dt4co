@@ -68,7 +68,7 @@ def main(args) -> None:
     # ------------------------------------------------------------
     root_print(COMM, "Setting up function spaces and tissue segmentation indicator function.")
     Vh = exp.setupFunctionSpaces(mesh)
-    chi_gm = solveIndicators(mesh, subs, 1)
+    chi_gm = solveIndicators(mesh, subs, 1, solver_type="cg")
 
     # ------------------------------------------------------------
     # Set up the forward model.

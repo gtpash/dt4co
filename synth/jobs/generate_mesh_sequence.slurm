@@ -60,7 +60,7 @@ pwd
 # generate sequence of uniformly refined meshes
 REFINEMENT_LEVELS=( 1 2 3 )
 BASE_RESOLUTION=32
-MESH_DIR=$SCRATCH/sub-00101/
+MESH_DIR=$SCRATCH/sub-00101/mesh_refinement_study/
 
 for L in "${REFINEMENT_LEVELS[@]}"
 do

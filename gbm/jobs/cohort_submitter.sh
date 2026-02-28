@@ -26,7 +26,7 @@ PLACEHOLDER="WXX"
 
 # SLURM_SCRIPT="run_VBG.slurm"
 # SLURM_SCRIPT="pp_VBG.slurm"
-# SLURM_SCRIPT="run_rd_mle.slurm"
+# SLURM_SCRIPT="run_mle.slurm"
 # SLURM_SCRIPT="run_bip.slurm"
 SLURM_SCRIPT="run_fwd_prop.slurm"
 

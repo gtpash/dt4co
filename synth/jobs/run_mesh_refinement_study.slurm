@@ -55,7 +55,7 @@ do
     DELTA_T=${TIMESTEPS[$L]}
     echo "Generating data with reslution $L and timestep ${DELTA_T}"
     MESHDIR=$STUDYDIR/mesh_${BASE_RESOLUTION}_refine_$L/
-    MV2_SMP_USE_CMA=0 MV2_ENABLE_AFFINITY=0 apptainer run $SIF python3 $DT4CO_PATH/synth/generate_synthetic_observations.py \
+    MV2_SMP_USE_CMA=0 MV2_ENABLE_AFFINITY=0 apptainer run $SIF python3 $DT4CO_PATH/synth/generate_mesh_refinement_observations.py \
         --pdir $PDIR \
         --mesh $MESHDIR/full${BASE_RESOLUTION}-all.h5 \
         --outdir $MESHDIR \

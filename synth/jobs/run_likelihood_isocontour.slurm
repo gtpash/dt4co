@@ -49,7 +49,7 @@ IMGFREQ="1"           # frequency of observations [days]
 EXPNAME="${EXPTYPE}_freq${IMGFREQ}"    # experiment name
 
 # set up I/O
-RESDIR="${SCRATCH}/hgg/sub-${SUBID}/"
+RESDIR="${SCRATCH}/sub-${SUBID}/"
 OUTDIR="${RESDIR}/${EXPNAME}_bip/"
 SYNTHDIR="${RESDIR}/synthetic_${EXPTYPE}_obs/"
 

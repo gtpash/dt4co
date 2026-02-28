@@ -18,7 +18,7 @@
 #SBATCH -J run_mesh_seq             # Job name
 #SBATCH -o run_mesh_seq.o.%j        # Name of stdout output file
 #SBATCH -e run_mesh_seq.e.%j        # Name of stderr error file
-#SBATCH -p small                    # Queue (partition) name
+#SBATCH -p normal                   # Queue (partition) name
 #SBATCH -N 4                        # Total # of nodes 
 #SBATCH -n 4                        # Total # of mpi tasks
 #SBATCH -t 04:00:00                 # Run time (hh:mm:ss)

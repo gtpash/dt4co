@@ -58,8 +58,7 @@ def main(args) -> None:
     # ------------------------------------------------------------
     # Set up the experiment.
     # ------------------------------------------------------------
-    IMG_FREQ = 1  # imaging frequency [days] (every third day)
-    TX_START = 14.0  # start of therapy [days]
+    TX_START = 7.0  # start of therapy [days]
     OBS_DATE = args.obs_date  # at what point should the observation be taken? (in days)
 
     exp = synthExperiment()
@@ -167,7 +166,7 @@ if __name__ == "__main__":
     parser.add_argument("--outdir", type=str, required=True, help="Output directory to store observations.")
     parser.add_argument("--experiment_type", type=str, required=True, choices=["rd", "rdtx"], help="Type of experiment to run.")
 
-    parser.add_argument("--obs_date", type=float, default=28.0, help="Date for comparison observation (in days).")
+    parser.add_argument("--obs_date", type=float, default=14.0, help="Date for comparison observation (in days).")
 
     # Output options.
     parser.add_argument("--verbose", action=argparse.BooleanOptionalAction, default=False, help="Verbose output.")

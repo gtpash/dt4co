@@ -153,7 +153,7 @@ def main(args) -> None:
     root_print(COMM, f"Rasterizing the observations at at the final time {int(tf):03d}.")
     root_print(COMM, f"Output file: {os.path.join(OUT_DIR, f'observed.nii')}")
     helpfun.vector().zero()
-    helpfun.vector().axpy(1.0, x0[hp.STATE].view(int(tf)).vector())
+    helpfun.vector().axpy(1.0, x0[hp.STATE].view(int(tf)))
     rasterizeFunction(helpfun, Vh[hp.STATE], REF_NII, os.path.join(OUT_DIR, f"observed.nii"), obsOp=obsOp)
 
 

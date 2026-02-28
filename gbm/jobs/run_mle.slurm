@@ -45,9 +45,9 @@ pwd
 SIF=$SCRATCH/containers/onco-fenics-2019.1.0_latest.sif  # path to Apptainer image
 export IBRUN_TASKS_PER_NODE=56  # Set the number of tasks per node (56 is max for CLX node)
 
-SUBID=WXX           # subject to be processed
-EXPNAME=dmrd_mle    # experiment name
-EXPTYPE=rd          # experiment type
+SUBID=WXX            # subject to be processed
+EXPNAME=dmrdtx_mle   # experiment name
+EXPTYPE=rdtx         # experiment type
 
 # set up I/O
 PDIR=$WORK/data/IvyGAP/$SUBID/

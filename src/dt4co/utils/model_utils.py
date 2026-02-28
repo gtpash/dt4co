@@ -31,7 +31,7 @@ def solveIndicators(mesh: dl.Mesh, subs: dl.MeshFunction, sidx: int, solver_para
     varf = dl.inner(chi_test, chi) * ufl.dx - ufl.inner(dl.Constant(1.0), chi_test) * dx(sidx)
 
     if solver_params is not None:
-        dl.solve(varf == 0, chi, solver_params=solver_params)
+        dl.solve(varf == 0, chi, solver_parameters=solver_params)
     else:
         dl.solve(varf == 0, chi)
 

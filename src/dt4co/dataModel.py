@@ -197,7 +197,7 @@ class PatientData:
         date_obj = datetime.strptime(date_str, "%Y-%m-%d")
         date_obj = date_obj.date()
 
-        ct_eff = 0.3  # default value
+        ct_eff = 0.1  # default value
 
         return ChemotherapyTreatment(date_obj, ct_eff)
 

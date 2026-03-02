@@ -61,12 +61,13 @@ EVEC="$BIPDIR/${EXPNAME}_eigenvectors_data.h5"
 MAP="$BIPDIR/${EXPNAME}_param_data.h5"
 NSAMPLES="500"
 DRAW_SAMPLES=true
+NMODES="64"
 
 #  ---------------------------------------------------------
 # draw samples from the prior + LA posterior
 #  ---------------------------------------------------------
 if [ "$DRAW_SAMPLES" = true ] ; then
-    MV2_SMP_USE_CMA=0 ibrun apptainer run $SIF python3 -u $DT4CO_PATH/synth/draw_la_samples.py --mesh $MESH --eval $EVAL --evec $EVEC --map $MAP --nsamples $NSAMPLES --outdir $BIPDIR --write_viz
+    MV2_SMP_USE_CMA=0 ibrun apptainer run $SIF python3 -u $DT4CO_PATH/synth/draw_la_samples.py --mesh $MESH --eval $EVAL --evec $EVEC --map $MAP --nsamples $NSAMPLES --outdir $BIPDIR --write_viz --nmodes $NMODES
 fi
 
 #  ---------------------------------------------------------

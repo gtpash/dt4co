@@ -287,7 +287,7 @@ class pwrdtxExperiment(Experiment):
         self.m_width = None  # do not use the mollified version
 
         # Define the chemotherapy term.
-        self.BETA = 24.0 / 1.8  # clearance rate of the chemotherapy [1/day]
+        self.BETA = 24.0 * np.log(2.0) / 1.8  # clearance rate of the chemotherapy [1/day]
 
         # Define the boundary conditions.
         self.bc = []  # homogeneous Neumann for state

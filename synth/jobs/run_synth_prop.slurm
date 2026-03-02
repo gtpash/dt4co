@@ -61,7 +61,7 @@ EVEC="$BIPDIR/${EXPNAME}_eigenvectors_data.h5"
 MAP="$BIPDIR/${EXPNAME}_param_data.h5"
 NSAMPLES="500"
 DRAW_SAMPLES=true
-NMODES="64"
+NMODES="50"
 
 #  ---------------------------------------------------------
 # draw samples from the prior + LA posterior

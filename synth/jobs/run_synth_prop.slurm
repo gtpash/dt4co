@@ -48,23 +48,26 @@ EXPTYPE="rdtx"
 IMGFREQ="1"
 EXPNAME="${EXPTYPE}_freq${IMGFREQ}"
 
-PDIR="$WORK/data/UPENN-GBM/sub-$SUBID/"
-RESDIR="${SCRATCH}/hgg/sub-${SUBID}/"
+RESDIR="${SCRATCH}/sub-${SUBID}/"
 BIPDIR="${RESDIR}/${EXPNAME}_bip/"
-MESH="${RESDIR}/mesh/full64-all.h5"
 SYNTHDIR="${RESDIR}/synthetic_${EXPTYPE}_obs/"
+
+BASE_RESOLUTION=64
+REFINEMENT_LEVEL=0
+MESH="${RESDIR}/mesh_${BASE_RESOLUTION}_refine_${REFINEMENT_LEVEL}/full${BASE_RESOLUTION}-all.h5"
 
 EVAL="$BIPDIR/${EXPNAME}_eigenvalues.txt"
 EVEC="$BIPDIR/${EXPNAME}_eigenvectors_data.h5"
 MAP="$BIPDIR/${EXPNAME}_param_data.h5"
-NSAMPLES="1000"
-DRAW_SAMPLES=false
+NSAMPLES="500"
+DRAW_SAMPLES=true
+NMODES="50"
 
 #  ---------------------------------------------------------
 # draw samples from the prior + LA posterior
 #  ---------------------------------------------------------
 if [ "$DRAW_SAMPLES" = true ] ; then
-    MV2_SMP_USE_CMA=0 ibrun apptainer run $SIF python3 -u $DT4CO_PATH/synth/draw_la_samples.py --mesh $MESH --eval $EVAL --evec $EVEC --map $MAP --nsamples $NSAMPLES --outdir $BIPDIR --write_viz
+    MV2_SMP_USE_CMA=0 ibrun apptainer run $SIF python3 -u $DT4CO_PATH/synth/draw_la_samples.py --mesh $MESH --eval $EVAL --evec $EVEC --map $MAP --nsamples $NSAMPLES --outdir $BIPDIR --write_viz --nmodes $NMODES
 fi
 
 #  ---------------------------------------------------------
@@ -72,7 +75,7 @@ fi
 #  ---------------------------------------------------------
 PRED_DATE="28"
 PRED_DATE=$(printf "%03d" $PRED_DATE)  # Pads with zero to "XXX" format
-L2F_FLAG="--no-l2f"                    # Flag for last-to-final pushforward "--l2f" or "--no-l2f"
+L2F_FLAG="--l2f"                    # Flag for last-to-final pushforward "--l2f" or "--no-l2f"
 PROP_IMGFREQ="7"
 VIZ_FLAG="--no-write_viz"              # Flag for writing visualization data "--write_viz" or "--no-write_viz"
 

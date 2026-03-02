@@ -17,8 +17,7 @@
 ##################################################################################################
 
 # Define the cohort of subjects.
-# COHORT=("W03" "W10" "W11" "W16" "W18" "W20" "W29" "W31" "W35" "W36" "W39" "W43" "W50" "W53")
-COHORT=("W11" "W16" "W18" "W29" "W31" "W35" "W36" "W39" "W50" "W53")
+COHORT=("W03" "W11" "W16" "W29" "W35" "W36" "W43" "W53")
 
 # directory where patient data is stored.
 # DATADIR="${WORK}/data/IvyGAP/"
@@ -27,7 +26,7 @@ PLACEHOLDER="WXX"
 
 # SLURM_SCRIPT="run_VBG.slurm"
 # SLURM_SCRIPT="pp_VBG.slurm"
-# SLURM_SCRIPT="run_rd_mle.slurm"
+# SLURM_SCRIPT="run_mle.slurm"
 # SLURM_SCRIPT="run_bip.slurm"
 SLURM_SCRIPT="run_fwd_prop.slurm"
 

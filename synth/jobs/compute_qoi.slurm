@@ -46,11 +46,14 @@ EXPTYPE="rdtx"
 IMGFREQ="1"
 EXPNAME="${EXPTYPE}_freq${IMGFREQ}"
 
-PDIR="$WORK/data/UPENN-GBM/sub-$SUBID/"
-RESDIR="${SCRATCH}/hgg/sub-${SUBID}/"
+
+RESDIR="${SCRATCH}/sub-${SUBID}/"
 BIPDIR="${RESDIR}/${EXPNAME}_bip/"
-MESH="${RESDIR}/mesh/full64-all.h5"
 SYNTHDIR="${RESDIR}/synthetic_${EXPTYPE}_obs/"
+
+BASE_RESOLUTION=64
+REFINEMENT_LEVEL=0
+MESH="${RESDIR}/mesh_${BASE_RESOLUTION}_refine_${REFINEMENT_LEVEL}/full${BASE_RESOLUTION}-all.h5"
 
 EVAL="$BIPDIR/${EXPNAME}_eigenvalues.txt"
 EVEC="$BIPDIR/${EXPNAME}_eigenvectors_data.h5"

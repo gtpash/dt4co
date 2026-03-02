@@ -68,7 +68,9 @@ def main(args) -> None:
     # ------------------------------------------------------------
     root_print(COMM, "Setting up function spaces and tissue segmentation indicator function.")
     Vh = exp.setupFunctionSpaces(mesh)
-    chi_gm = solveIndicators(mesh, subs, 1)
+
+    solver_params = {"newton_solver": {"linear_solver": "mumps"}}
+    chi_gm = solveIndicators(mesh, subs, 1, solver_params=solver_params)  # gray matter indicator function
 
     # ------------------------------------------------------------
     # Set up the forward model.

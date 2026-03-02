@@ -178,8 +178,8 @@ def main(args) -> None:
         root_print(COMM, SEP)
 
     # Laplace approximation parameters.
-    kk = 50  # number of eigenvectors
-    pp = 5  # oversampling for randomized method.
+    kk = 128  # number of eigenvectors
+    pp = 8  # oversampling for randomized method.
 
     solver = hp.ReducedSpaceNewtonCG(model, bip_parameters)
 

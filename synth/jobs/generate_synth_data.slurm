@@ -47,7 +47,7 @@ PDIR="$WORK/data/UPENN-GBM/sub-$SUBID/"
 RESDIR="${SCRATCH}/sub-${SUBID}"
 
 BASE_RESOLUTION=64
-REFINEMENT=2
+REFINEMENT=1
 MESH="${RESDIR}/mesh_${BASE_RESOLUTION}_refine_${REFINEMENT}/full${BASE_RESOLUTION}-all.h5"
 
 # ----------------------------------------------------

@@ -176,6 +176,8 @@ def main(args) -> None:
     if COMM.rank == 0:
         np.savetxt(os.path.joint(args.outdir, f"eigenvalues_{args.num_evals}.txt"), d)
 
+    root_print(COMM, "Done.")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Compute prior-preconditioned Hessian spectrum.")

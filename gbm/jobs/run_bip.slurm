@@ -56,7 +56,6 @@ NSAMPLES="500"
 PDIR="$WORK/data/IvyGAP/$SUBID/"
 BIPDIR="$SCRATCH/hgg/sub-$SUBID/${EXPNAME}_bip/"
 MESH="$SCRATCH/hgg/sub-$SUBID/bip_mesh/bip_mesh-all.h5"
-PROPDIR="$SCRATCH/hgg/sub-$SUBID/${EXPNAME}_prop/"
 
 # run the Bayesian inverse problem
 MV2_SMP_USE_CMA=0 ibrun apptainer run $SIF python3 -u $DT4CO_PATH/gbm/run_bip.py \

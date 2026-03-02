@@ -197,7 +197,7 @@ class PatientData:
         date_obj = datetime.strptime(date_str, "%Y-%m-%d")
         date_obj = date_obj.date()
 
-        ct_eff = 0.3  # default value
+        ct_eff = 0.1  # default value
 
         return ChemotherapyTreatment(date_obj, ct_eff)
 
@@ -216,7 +216,7 @@ class PatientData:
             Dictionary of the chemotherapy protocol.
         """
         first = self.get_timeline()[0]
-        return {days_since_first(r.time, first): r.sf for r in self.chemo_plan.tx_visits}
+        return {days_since_first(r.time, first): r.eff for r in self.chemo_plan.tx_visits}
 
     @property
     def chemo_days(self) -> List[float]:
@@ -227,4 +227,4 @@ class PatientData:
     @property
     def chemo_effects(self) -> List[float]:
         """Get the doses for each radiotherapy visit."""
-        return np.array([r.sf for r in self.chemo_plan.tx_visits])
+        return np.array([r.eff for r in self.chemo_plan.tx_visits])

@@ -187,6 +187,8 @@ def main(args) -> None:
     stepdir = dl.Function(Vh[hp.PARAMETER])
 
     llnp = np.zeros((len(steps), len(steps)))  # array to store the log-likelihood values at each point in the grid
+    totalnp = np.zeros((len(steps), len(steps)))  # array to store the total number of observations at each point in the grid
+    regnp = np.zeros((len(steps), len(steps)))  # array to store the regularization term at each point in the grid
 
     # loop through the grid, evaluate the likelihood at each point.
     total = len(steps) * len(steps)
@@ -220,6 +222,8 @@ def main(args) -> None:
             cost = model.cost(xx)  # evaluate the cost (negative log-likelihood) at the current point
 
             llnp[ii, jj] = cost[2]  # store only the misfit value
+            totalnp[ii, jj] = cost[0]  # store the total number of observations
+            regnp[ii, jj] = cost[1]  # store the regularization term
 
     root_print(COMM, "Finished evaluating the likelihood on the grid.")
     root_print(COMM, f"Writing values to file: {os.path.join(OUT_DIR, 'likelihood_isocontour_data.npz')}")
@@ -227,6 +231,7 @@ def main(args) -> None:
     if COMM.rank == 0:
         # save the log-likelihood values to file for later visualization.
         np.savez(os.path.join(args.outdir, "likelihood_isocontour_data.npz"), steps=steps, llnp=llnp)
+        np.savez(os.path.join(args.outdir, "likelihood_isocontour_data_detailed.npz"), steps=steps, llnp=llnp, totalnp=totalnp, regnp=regnp)
 
 
 if __name__ == "__main__":

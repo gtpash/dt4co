@@ -108,7 +108,7 @@ def main(args) -> None:
     root_print(COMM, f"Making misfit...")
     root_print(COMM, f"Using pointwise observation operator: {USE_OBSOP}")
     # Load in data, get simulation times.
-    misfits = makeMisfitTD(pinfo, Vh[hp.STATE], exp.bc, exp.NOISE, zoff=ZOFF, nholdout=N_HOLDOUT, pointwise=USE_OBSOP)
+    misfits = makeMisfitTD(pinfo, Vh[hp.STATE], exp.bc, exp.NOISE * exp.NOISE, zoff=ZOFF, nholdout=N_HOLDOUT, pointwise=USE_OBSOP)
     tf = pinfo.visit_days[-1 - N_HOLDOUT]  # final time.
 
     # Expecting solver parameters to be set from either CLI or .petscrc

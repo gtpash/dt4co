@@ -93,17 +93,8 @@ def SphericalInitialCondition(dim: int, center: list, r: float, u0: float = 0.5,
     if dim == 2:
         return dl.Expression("pow(x[0]-cx,2)+pow(x[1]-cy,2) < pow(r,2) ? valin : valout", cx=center[0], cy=center[1], r=r, valin=u0, valout=0.0, degree=degree)
     elif dim == 3:
-        return dl.Expression(
-            "pow(x[0]-cx,2)+pow(x[1]-cy,2)+pow(x[2]-cz,2) \
-                    < pow(r,2) ? valin : valout",
-            cx=center[0],
-            cy=center[1],
-            cz=center[2],
-            r=r,
-            valin=u0,
-            valout=0,
-            degree=degree,
-        )
+        return dl.Expression("pow(x[0]-cx,2)+pow(x[1]-cy,2)+pow(x[2]-cz,2) \
+                    < pow(r,2) ? valin : valout", cx=center[0], cy=center[1], cz=center[2], r=r, valin=u0, valout=0, degree=degree)
     else:
         raise ValueError(f"{dim} is not a supported geometric dimension.")
 

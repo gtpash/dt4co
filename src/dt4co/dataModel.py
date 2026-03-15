@@ -57,7 +57,7 @@ class ChemotherapyTreatment:
     """Class to hold information for a single chemotherapy visit."""
 
     time: TreatmentTime  # date of the chemotherapy visits
-    sf: float  # surviving fraction for the chemotherapy dosage
+    eff: float  # combined effect of efficacy * concentration in lieu of more realistic model
     # todo: add more realistic model for chemotherapy effects
 
 
@@ -67,7 +67,7 @@ class ChemotherapySpecification:
 
     @property
     def protocol(self) -> Dict[TreatmentTime, float]:
-        return {tx.time: tx.sf for tx in self.tx_visits}
+        return {tx.time: tx.eff for tx in self.tx_visits}
 
 
 # ------------------------------
@@ -197,9 +197,9 @@ class PatientData:
         date_obj = datetime.strptime(date_str, "%Y-%m-%d")
         date_obj = date_obj.date()
 
-        sf = 0.82  # default value
+        ct_eff = 18  # default value
 
-        return ChemotherapyTreatment(date_obj, sf)
+        return ChemotherapyTreatment(date_obj, ct_eff)
 
     def _unpack_chemotherapy(self, info: dict) -> ChemotherapySpecification:
         """Unpack the visits from the JSON file."""
@@ -216,7 +216,7 @@ class PatientData:
             Dictionary of the chemotherapy protocol.
         """
         first = self.get_timeline()[0]
-        return {days_since_first(r.time, first): r.sf for r in self.chemo_plan.tx_visits}
+        return {days_since_first(r.time, first): r.eff for r in self.chemo_plan.tx_visits}
 
     @property
     def chemo_days(self) -> List[float]:
@@ -227,4 +227,4 @@ class PatientData:
     @property
     def chemo_effects(self) -> List[float]:
         """Get the doses for each radiotherapy visit."""
-        return np.array([r.sf for r in self.chemo_plan.tx_visits])
+        return np.array([r.eff for r in self.chemo_plan.tx_visits])

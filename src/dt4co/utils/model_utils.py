@@ -7,7 +7,19 @@ import hippylib as hp
 
 
 # -------------------------------------
-def solveIndicators(mesh: dl.Mesh, subs: dl.MeshFunction, sidx: int) -> dl.Function:
+def solveIndicators(mesh: dl.Mesh, subs: dl.MeshFunction, sidx: int, solver_params: dict = None) -> dl.Function:
+    """Solve for indicator function
+
+    Args:
+        mesh (dl.Mesh): FEniCS mesh.
+        subs (dl.MeshFunction): Mesh function with integer values for each subdomain.
+        sidx (int): Subdomain index for which to solve the indicator function.
+        solver_params (dict, optional): Solver parameters for dl.solve. Defaults to None.
+
+    Returns:
+        dl.Function: Indicator function for the specified subdomain index.
+    """
+
     dl.set_log_level(dl.LogLevel.WARNING)  # supress output
 
     Vh_DG0 = dl.FunctionSpace(mesh, "DG", 0)
@@ -17,7 +29,11 @@ def solveIndicators(mesh: dl.Mesh, subs: dl.MeshFunction, sidx: int) -> dl.Funct
     chi_test = dl.TestFunction(Vh_DG0)
     dx = dl.Measure("dx", domain=mesh, subdomain_data=subs)
     varf = dl.inner(chi_test, chi) * ufl.dx - ufl.inner(dl.Constant(1.0), chi_test) * dx(sidx)
-    dl.solve(varf == 0, chi)
+
+    if solver_params is not None:
+        dl.solve(varf == 0, chi, solver_parameters=solver_params)
+    else:
+        dl.solve(varf == 0, chi)
 
     return chi
 
@@ -83,18 +99,31 @@ def SphericalInitialCondition(dim: int, center: list, r: float, u0: float = 0.5,
         raise ValueError(f"{dim} is not a supported geometric dimension.")
 
 
-def MollifierInitialCondition(dim: int, center: list, r: float, v: float = 0.5, degree: int = 1) -> dl.Expression:
+def MollifierInitialCondition(dim: int, center: list, r: float, v: float = 0.5, degree: int = 5) -> dl.Expression:
+    """Gaussian bump expression.
+    f(x) = a * exp( -( (x-c)/b )^2 )
+
+    Args:
+        center (list): Center location.
+        r (float): Width (standard deviation).
+        v (float, optional): Roughly the maximum value. Defaults to 0.5.
+        degree (int, optional): Degree for dl.Expression interpolation. Defaults to 5.
+
+    Returns:
+        dl.Expression: Dolfin Expression for the Gaussian bump initial condition.
+    """
 
     assert len(center) == dim, f"Geometric dimension does not equal coordinates in 'center'. Dimension should be {dim}."
+    assert dim in [2, 3], f"Dimension should be 2 or 3."
 
     if dim == 2:
-        return dl.Expression("v * a * exp( -(pow(x[0]-cx,2)+pow(x[1]-cy,2) )/ (2*(pow(b,2))) )", cx=center[0], cy=center[1], a=1 / (np.sqrt(2 * math.pi) * r), b=r, v=v, degree=degree)
-    if dim == 3:
-        return dl.Expression(
-            "v * a * exp( -( pow(x[0]-cx,2) + pow(x[1]-cy,2) + pow(x[2]-cz,2) ) / (2*(pow(b,2))) )", cx=center[0], cy=center[1], cz=center[2], a=1 / (np.sqrt(2 * math.pi) * r), b=r, v=v, degree=degree
-        )
-    else:
-        raise ValueError(f"{dim} is not a supported geometric dimension.")
+        # return dl.Expression("v * a * exp( -(pow(x[0]-cx,2)+pow(x[1]-cy,2) )/ (2*(pow(b,2))) )", cx=center[0], cy=center[1], a=1 / (np.sqrt(2 * math.pi) * r), b=r, v=v, degree=degree)
+        return dl.Expression("a * exp( -pow( (x[0] - cx) / b, 2) - pow( (x[1] - cy) / b, 2) )", cx=center[0], cy=center[1], a=v, b=r, degree=degree)
+    elif dim == 3:
+        # return dl.Expression(
+        #     "v * a * exp( -( pow(x[0]-cx,2) + pow(x[1]-cy,2) + pow(x[2]-cz,2) ) / (2*(pow(b,2))) )", cx=center[0], cy=center[1], cz=center[2], a=1 / (np.sqrt(2 * math.pi) * r), b=r, v=v, degree=degree
+        # )
+        return dl.Expression("a * exp( -pow( (x[0] - cx) / b, 2) - pow( (x[1] - cy) / b, 2) - pow( (x[2] - cz) / b, 2) )", cx=center[0], cy=center[1], cz=center[2], a=v, b=r, degree=degree)
 
 
 def computeFunctionCenterOfMass(f: dl.Function, Vh: dl.FunctionSpace) -> list:

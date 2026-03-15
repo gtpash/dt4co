@@ -88,8 +88,8 @@ class synthExperiment(Experiment):
         self.m_width = None  # do not use the mollified version
 
         # Define the chemotherapy term.
-        self.CT_EFFECT = 0.9  # chemotherapy surviving fraction
-        self.BETA = 24.0 / 1.8  # clearance rate of the chemotherapy [1/day]
+        self.CT_EFFECT = 0.1  # chemotherapy effect
+        self.BETA = 24.0 * np.log(2.0) / 1.8  # clearance rate of the chemotherapy [1/day]
 
         # Define the boundary conditions.
         self.bc = []  # homogeneous Neumann for state
@@ -110,14 +110,18 @@ class synthExperiment(Experiment):
 
         return Vh
 
-    def setupFunctionAssigner(self, Vh: dl.FunctionSpace, Vhi: dl.FunctionSpace):
-        """Set up function assigner for mixed (vector) space.
+    def setupFunctionAssigner(self, Vh) -> dl.FunctionAssigner:
+        """Set up function assigner for (BIP) mixed vector space.
 
         Args:
-            Vh (dl.FunctionSpace): The mixed function space.
-            Vhi (dl.FunctionSpace): The individual function space for each component.
+            mesh (dl.Mesh): The mesh to build the function assigner on.
+
+        Returns:
+            dl.FunctionAssigner: The function assigner for the mixed space.
         """
-        return dl.FunctionAssigner(Vh, [Vhi, Vhi])
+        Vhi = dl.FunctionSpace(Vh.mesh(), "Lagrange", self.PARAM_DEGREE)
+
+        return dl.FunctionAssigner(Vh, [Vhi, Vhi]), Vhi
 
     def setupTXModels(self, tx_start: int = 14.0):
         """Set up the radiotherapy and chemotherapy models."""
@@ -219,7 +223,7 @@ class synthExperiment(Experiment):
         else:
             Vhmi = dl.FunctionSpace(mesh, "Lagrange", self.PARAM_DEGREE)
 
-        # P1 x P1 x P1 for m_dg, m_dw, m_k
+        # P1 x P1 for m_d, m_k
         mixed_element = ufl.MixedElement([Vhmi.ufl_element(), Vhmi.ufl_element()])
         Vhm = dl.FunctionSpace(mesh, mixed_element)
         Vh = [Vhu, Vhm, Vhu]

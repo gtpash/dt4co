@@ -38,14 +38,17 @@ date
 pwd
 
 # set up the environment
-SIF=$SCRATCH/containers/onco-fenics_latest.sif  # path to Apptainer image
+SIF=$WORK/containers/onco-fenics_latest.sif  # path to Apptainer image
 export IBRUN_TASKS_PER_NODE=56  # Set the number of tasks per node (56 is max for CLX node)
 
 # set up paths to common directories.
 SUBID="00101"
 PDIR="$WORK/data/UPENN-GBM/sub-$SUBID/"
-RESDIR="${SCRATCH}/hgg/sub-${SUBID}"
-MESH="${RESDIR}/mesh/full128-all.h5"
+RESDIR="${SCRATCH}/sub-${SUBID}"
+
+BASE_RESOLUTION=64
+REFINEMENT=1
+MESH="${RESDIR}/mesh_${BASE_RESOLUTION}_refine_${REFINEMENT}/full${BASE_RESOLUTION}-all.h5"
 
 # ----------------------------------------------------
 # No therapy. Mollified IC.

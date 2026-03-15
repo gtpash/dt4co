@@ -2,12 +2,12 @@
 
 #----------------------------------------------------
 # 
-# Slurm job for running the Bayesian inverse problem on the synthetic data.
+# Slurm job for evaluating the log-likelihood on a grid of parameter values, so that one can compute the isocontours of the log-likelihood function.
 #
 # Notes:
 #
 #   -- Launch this script by executing
-#      "sbatch run_synth_rd_bip.slurm" on a Frontera login node.
+#      "sbatch run_likelihood_isocontour.slurm" on a Frontera login node.
 #
 #   -- This script assumes that you have saved the sif image in $SCRATCH/containers
 #
@@ -19,9 +19,9 @@
 #
 #----------------------------------------------------
 
-#SBATCH -J sub-00101_rdtx_bip              # Job name
-#SBATCH -o sub-00101_rdtx_bip.o.%j         # Name of stdout output file
-#SBATCH -e sub-00101_rdtx_bip.e.%j         # Name of stderr error file
+#SBATCH -J sub-00101_likelihood_eval       # Job name
+#SBATCH -o sub-00101_likelihood_eval.o.%j  # Name of stdout output file
+#SBATCH -e sub-00101_likelihood_eval.e.%j  # Name of stderr error file
 #SBATCH -p small                           # Queue (partition) name
 #SBATCH -N 2                               # Total # of nodes 
 #SBATCH -n 4                               # Total # of mpi tasks
@@ -51,14 +51,21 @@ EXPNAME="${EXPTYPE}_freq${IMGFREQ}"    # experiment name
 # set up I/O
 RESDIR="${SCRATCH}/sub-${SUBID}/"
 OUTDIR="${RESDIR}/${EXPNAME}_bip/"
+SYNTHDIR="${RESDIR}/synthetic_${EXPTYPE}_obs/"
 
 BASE_RESOLUTION=64
 REFINEMENT_LEVEL=0
 MESH="${RESDIR}/mesh_${BASE_RESOLUTION}_refine_${REFINEMENT_LEVEL}/full${BASE_RESOLUTION}-all.h5"
-SYNTHDIR="${RESDIR}/synthetic_${EXPTYPE}_obs/"
 
-# run the Bayesian inverse problem
-MV2_SMP_USE_CMA=0 ibrun apptainer run $SIF python3 -u $DT4CO_PATH/synth/run_synth_bip.py \
+BIPDIR="${RESDIR}/${EXPNAME}_bip/"
+MAP="${BIPDIR}/${EXPNAME}_param_data.h5"
+
+# set up the parameters for the sweep
+STEP_SIZE=0.1  # maximum step size for the grid of parameter values to evaluate
+NUM_STEPS=21   # number of steps in each direction
+
+# run the likelihood evaluation on a grid of parameter values
+MV2_SMP_USE_CMA=0 ibrun apptainer run $SIF python3 -u $DT4CO_PATH/synth/run_likelihood_isocontour.py \
     --pdir $SYNTHDIR \
     --outdir $OUTDIR \
     --mesh $MESH \
@@ -66,4 +73,7 @@ MV2_SMP_USE_CMA=0 ibrun apptainer run $SIF python3 -u $DT4CO_PATH/synth/run_synt
     --prefix ${EXPNAME} \
     --experiment_type $EXPTYPE \
     --noisy \
+    --map $MAP \
+    --step $STEP_SIZE \
+    --num_steps $NUM_STEPS \
     -fwd_ksp_type gmres -fwd_pc_type hypre -fwd_pc_hypre_type boomeramg
